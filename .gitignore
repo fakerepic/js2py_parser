@@ -1,1 +1,7 @@
-/target
+.DS_Store
+.idea
+debug/
+target/
+Cargo.lock
+**/*.rs.bk
+js_cases/
