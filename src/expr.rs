@@ -49,7 +49,7 @@ impl<'a> Parser<'a> {
         let span = self.start_span();
         let lhs = self.parse_binary_expression_or_higher(Precedence::Comma)?;
         let kind = self.cur_kind();
-        if kind == Type::Eq {
+        if kind.is_assignment_operator() {
             return self.parse_assignment_expression_recursive(span, lhs);
         }
 

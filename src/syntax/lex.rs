@@ -17,6 +17,7 @@ pub trait TokenTypeUtil {
     fn is_future_reserved_keyword(self) -> bool;
     fn is_all_keyword(self) -> bool;
     fn is_variable_declaration(self) -> bool;
+    fn is_assignment_operator(self) -> bool;
 }
 
 impl TokenTypeUtil for Type {
@@ -84,5 +85,9 @@ impl TokenTypeUtil for Type {
 
     fn is_variable_declaration(self) -> bool {
         matches!(self, Var | Let | Const)
+    }
+    #[rustfmt::skip]
+    fn is_assignment_operator(self) -> bool {
+        matches!(self, Eq | PlusEq | MinusEq | StarEq | SlashEq | PercentEq | ShiftLeftEq | ShiftRightEq | ShiftRight3Eq | AmpEq | CaretEq | PipeEq)
     }
 }
