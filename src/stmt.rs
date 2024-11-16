@@ -86,7 +86,7 @@ impl<'a> Parser<'a> {
 
         // for (let | for (const | for (var
         // if self.at(Type::Const) || self.at(Type::Var) {
-        if self.at(Type::Var) {
+        if self.cur_kind().is_variable_declaration() {
             return self.parse_variable_declaration_for_statement(span);
         }
 

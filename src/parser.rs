@@ -254,7 +254,7 @@ mod test {
 
     #[test]
     fn parse_for_statement_test() {
-        let source = "for (var i = 0; false; i) { break }";
+        let source = "for (let i = 0; false; i) { break }";
         let mut parser = Parser::new(source);
         parser.bump_any();
         let ret = parser.parse_statement(StatementContext::StatementList);
