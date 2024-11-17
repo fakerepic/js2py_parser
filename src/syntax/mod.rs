@@ -1,3 +1,3 @@
-pub mod precedence;
-pub mod operator;
 pub mod lex;
+pub mod operator;
+pub mod precedence;

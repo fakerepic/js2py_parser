@@ -32,10 +32,10 @@ impl<'a> Parser<'a> {
         self.parse_program()
     }
 
-    pub fn parse_expression(mut self) -> std::result::Result<Expression<'a>, Vec<String>> {
+    pub fn parse_expression(mut self) -> Result<Expression<'a>> {
         // initialize cur_token and prev_token by moving onto the first token
         self.bump_any();
-        let expr = self.parse_expr().map_err(|diagnostic| vec![diagnostic])?;
+        let expr = self.parse_expr()?;
         Ok(expr)
     }
 
@@ -393,7 +393,7 @@ mod test {
 
     #[test]
     fn pratt_test() {
-        let source = "a + b * c";
+        let source = "(a + b) + c * c";
         let parser = Parser::new(source);
         let ret = parser.parse_expression();
         match ret {

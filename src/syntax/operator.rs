@@ -49,7 +49,7 @@ pub enum AssignmentOperator {
 /// - [12.10 Binary Logical Operators](https://tc39.es/ecma262/#sec-binary-logical-operators)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 pub enum BinaryOperator {
-   #[serde(rename = "==")]
+    #[serde(rename = "==")]
     Equality = 0,
     #[serde(rename = "!=")]
     Inequality = 1,

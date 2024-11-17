@@ -29,9 +29,7 @@ impl<'a> Parser<'a> {
         Ok(id)
     }
 
-    pub(crate) fn parse_formal_parameters(
-        &mut self,
-    ) -> Result<Box<FormalParameters<'a>>> {
+    pub(crate) fn parse_formal_parameters(&mut self) -> Result<Box<FormalParameters<'a>>> {
         let span = self.start_span();
         self.expect(Type::LParen)?;
 
@@ -52,7 +50,7 @@ impl<'a> Parser<'a> {
         span: Span,
         id: Option<Identifier<'a>>,
     ) -> Result<Box<Function<'a>>> {
-        let params= self.parse_formal_parameters()?;
+        let params = self.parse_formal_parameters()?;
 
         let body = if self.at(Type::LCurly) {
             Some(self.parse_function_body()?)

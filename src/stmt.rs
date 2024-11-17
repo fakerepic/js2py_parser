@@ -35,7 +35,7 @@ impl<'a> Parser<'a> {
     fn parse_break_or_continue_statement(&mut self) -> Result<Statement<'a>> {
         let start_span = self.start_span();
         let kind = self.cur_kind();
-        self.bump_any(); 
+        self.bump_any();
         self.auto_semicoclon_insertion()?;
         let span = self.end_span(start_span);
         match kind {
@@ -85,12 +85,9 @@ impl<'a> Parser<'a> {
         }
 
         // for (let | for (const | for (var
-        // if self.at(Type::Const) || self.at(Type::Var) {
         if self.cur_kind().is_variable_declaration() {
             return self.parse_variable_declaration_for_statement(span);
         }
-
-        // let expr_span = self.start_span();
 
         if self.at(Type::RParen) {
             return self.parse_for_loop(span, None);
@@ -109,7 +106,6 @@ impl<'a> Parser<'a> {
         self.expect(Type::Semicolon)?;
         let test = if !self.at(Type::Semicolon) && !self.at(Type::RParen) {
             Some(self.parse_expr()?)
-            // Some(self.context(Context::In, Context::empty(), ParserImpl::parse_expr)?)
         } else {
             None
         };
@@ -118,7 +114,6 @@ impl<'a> Parser<'a> {
             None
         } else {
             Some(self.parse_expr()?)
-            // Some(self.context(Context::In, Context::empty(), ParserImpl::parse_expr)?)
         };
         self.expect(Type::RParen)?;
         let body = self.parse_statement(StatementContext::For)?;
@@ -134,17 +129,6 @@ impl<'a> Parser<'a> {
     fn parse_variable_declaration_for_statement(&mut self, span: Span) -> Result<Statement<'a>> {
         let start_span = self.start_span();
         let init_declaration = self.parse_variable_declaration(start_span)?;
-        // let init_declaration = self.context(Context::empty(), Context::In, |p| {
-        //     let decl_ctx = VariableDeclarationContext::new(VariableDeclarationParent::For);
-        //     p.parse_variable_declaration(start_span, decl_ctx, &Modifiers::empty())
-        // })?;
-
-        // for (.. a in) for (.. a of)
-        // if matches!(self.cur_kind(), Type::In | Type::Of) {
-        //     let init = ForStatementLeft::VariableDeclaration(init_declaration);
-        //     return self.parse_for_in_or_of_loop(span, r#await, init);
-        // }
-
         let init = Some(ForStatementInit::VariableDeclaration(Box::new(
             init_declaration,
         )));
@@ -251,7 +235,10 @@ impl<'a> Parser<'a> {
         };
         self.expect(Type::Colon)?;
         let mut consequent = vec![];
-        while !matches!(self.cur_kind(), Type::Case | Type::Default | Type::RCurly | Type::EOF) {
+        while !matches!(
+            self.cur_kind(),
+            Type::Case | Type::Default | Type::RCurly | Type::EOF
+        ) {
             let stmt = self.parse_statement(StatementContext::StatementList)?;
             consequent.push(stmt);
         }
@@ -304,9 +291,6 @@ impl<'a> Parser<'a> {
             .eat(Type::Eq)
             .then(|| self.parse_assignment_expression_or_higher())
             .transpose()?;
-
-        // if stmt_ctx.is_single_statement() {
-        // }
 
         Ok(VariableDeclaration {
             span: self.end_span(start_span),

@@ -1,5 +1,5 @@
-use serde::Serialize;
 use crate::syntax::operator::*;
+use serde::Serialize;
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize)]
 pub struct Span {
@@ -30,8 +30,6 @@ pub enum Statement<'a> {
     ExpressionStatement(Box<ExpressionStatement<'a>>),
     EmptyStatement(Box<EmptyStatement>),
     ReturnStatement(Box<ReturnStatement<'a>>),
-    // ForInStatement(Box<ForInStatement<'a>>),
-    // ForOfStatement(Box<ForOfStatement<'a>>),
     ForStatement(Box<ForStatement<'a>>),
     WhileStatement(Box<WhileStatement<'a>>),
     BreakStatement(Box<BreakStatement>),
@@ -39,7 +37,6 @@ pub enum Statement<'a> {
     DoWhileStatement(Box<DoWhileStatement<'a>>),
     SwitchStatement(Box<SwitchStatement<'a>>),
     WithStatement(Box<WithStatement<'a>>),
-
     VariableDeclarationStatement(Box<VariableDeclaration<'a>>),
     FunctionDeclaration(Box<Function<'a>>),
 }
@@ -79,39 +76,20 @@ pub enum ForStatementInit<'a> {
     Expression(Expression<'a>),
 }
 
-// #[derive(Debug, Clone, Serialize)]
-// pub struct ForInStatement<'a> {
-//     pub span: Span,
-//     pub left: ForStatementLeft<'a>,
-//     pub right: Expression<'a>,
-//     pub body: Statement<'a>,
-// }
-
 #[derive(Debug, Clone, Serialize)]
 pub enum ForStatementLeft<'a> {
     VariableDeclaration(Box<VariableDeclaration<'a>>),
     Expression(Expression<'a>),
 }
 
-// #[derive(Debug, Clone, Serialize)]
-// pub struct ForOfStatement<'a> {
-//     pub span: Span,
-//     pub r#await: bool,
-//     pub left: ForStatementLeft<'a>,
-//     pub right: Expression<'a>,
-//     pub body: Statement<'a>,
-// }
-
 #[derive(Debug, Clone, Serialize)]
 pub struct ContinueStatement {
     pub span: Span,
-    // pub label: Option<LabelIdentifier<'a>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct BreakStatement {
     pub span: Span,
-    // pub label: Option<LabelIdentifier<'a>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -178,11 +156,8 @@ pub enum VariableDeclarationKind {
 #[derive(Debug, Clone, Serialize)]
 pub struct Function<'a> {
     pub span: Span,
-    /// The function identifier. [`None`] for anonymous function expressions.
     pub id: Option<Identifier<'a>>,
-    /// Function parameters.
     pub params: Box<FormalParameters<'a>>,
-    /// The TypeScript return type annotation.
     pub body: Option<Box<FunctionBody<'a>>>,
 }
 

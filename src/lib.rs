@@ -21,31 +21,3 @@ pub enum StatementContext {
     For,
     StatementList,
 }
-
-// impl StatementContext {
-//     pub(crate) fn is_single_statement(self) -> bool {
-//         self != Self::StatementList
-//     }
-// }
-
-// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-// pub struct PasrseContext {
-//     pub r#return: bool,
-// }
-
-// #[derive(Debug, Clone, Copy, Eq, PartialEq)]
-// pub enum FunctionKind {
-//     Declaration,
-//     Expression,
-//     DefaultExport,
-// }
-//
-// impl FunctionKind {
-//     pub(crate) fn is_id_required(self) -> bool {
-//         matches!(self, Self::Declaration)
-//     }
-//
-//     pub(crate) fn is_expression(self) -> bool {
-//         self == Self::Expression
-//     }
-// }
