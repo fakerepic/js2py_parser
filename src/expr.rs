@@ -237,21 +237,50 @@ impl<'a> Parser<'a> {
     fn parse_primary_expression(&mut self) -> Result<Expression<'a>> {
         let span = self.start_span();
 
-        // if self.at(Type::Function) {
-        //     return self.parse_function_expression(span, r#async);
-        // }
-
         match self.cur_kind() {
             Type::Identifier => self.parse_identifier_expression(),
-            // Literal, RegularExpressionLiteral
             kind if kind.is_literal() => self.parse_literal_expression(),
-            // // ArrayLiteral
             Type::LBrack => self.parse_array_expression(),
-            // // ObjectLiteral
             Type::LCurly => self.parse_object_expression(),
-            // TODO: LParen
-            // Type::LParen => self.parse_parenthesized_expression(span),
+            Type::LParen => self.parse_parenthesized_expression(span),
             _ => self.parse_identifier_expression(),
+        }
+    }
+
+    fn parse_parenthesized_expression(&mut self, span: Span) -> Result<Expression<'a>> {
+        self.expect(Type::LParen)?;
+        let mut expressions = vec![];
+        while !self.at(Type::RParen) {
+            let expression = self.parse_assignment_expression_or_higher()?;
+            expressions.push(expression);
+            if self.at(Type::Comma) {
+                self.bump_any();
+            }
+        }
+        self.expect(Type::RParen)?;
+
+        let paren_span = self.end_span(span);
+
+        if expressions.is_empty() {
+            return Err("Parenthesized expression must contain at least one expression".into());
+        }
+
+        // ParenthesizedExpression is from acorn --preserveParens
+        if expressions.len() == 1 {
+            let expression = expressions.remove(0);
+            Ok(Expression::ParenthesizedExpression(Box::new(
+                ParenthesizedExpression {
+                    span: paren_span,
+                    expression,
+                },
+            )))
+        } else {
+            Ok(Expression::SequenceExpression(Box::new(
+                SequenceExpression {
+                    span: paren_span,
+                    expressions,
+                },
+            )))
         }
     }
 

@@ -215,6 +215,7 @@ pub enum Expression<'a> {
     StaticMemberExpression(Box<StaticMemberExpression<'a>>),
     ComputedMemberExpression(Box<ComputedMemberExpression<'a>>),
     CallExpression(Box<CallExpression<'a>>),
+    ParenthesizedExpression(Box<ParenthesizedExpression<'a>>),
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -319,6 +320,12 @@ pub struct LogicalExpression<'a> {
     pub left: Expression<'a>,
     pub operator: LogicalOperator,
     pub right: Expression<'a>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ParenthesizedExpression<'a> {
+    pub span: Span,
+    pub expression: Expression<'a>,
 }
 
 #[derive(Debug, Clone, Serialize)]
